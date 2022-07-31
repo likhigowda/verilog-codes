@@ -1,0 +1,62 @@
+/*
+4 to 1 multiplexer
+
+sel1    sel0    |   y
+0       0           a(4)
+0       1           b(5)
+1       0           c(6)
+1       1           d(7)
+
+*/
+
+// verilog code
+module mux(a,b,c,d,sel,y);
+input [2:0]a;
+input [2:0]b;
+input [2:0]c;
+input [2:0]d;
+
+input [1:0]sel;
+
+output [2:0]y;
+reg [2:0]y;
+
+always @(*)
+begin
+    case(sel)
+        2'b00:y = a;
+        2'b01:y = b;
+        2'b10:y = c;
+        2'b11:y = d;
+    endcase
+end
+endmodule
+
+//test bench
+module mux_test;
+reg [2:0]a;
+reg [2:0]b;
+reg [2:0]c;
+reg [2:0]d;
+
+reg [1:0]sel;
+
+wire [2:0]y;
+
+mux uut(a,b,c,d,sel,y);
+
+initial
+begin
+    $monitor("sel = %b ; y = %d",sel,y);
+    a = 3'd4 ; b = 3'd5 ; c = 3'd6 ; d = 3'd7;
+    sel = 2'b00;
+    #10 sel = 2'b01;
+    #10 sel = 2'b10;
+    #10 sel = 2'b11;
+    #10 $finish;
+end
+endmodule
+    
+
+    
+
