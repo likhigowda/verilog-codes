@@ -1,0 +1,175 @@
+// d flip dlop
+module dff(clk, rst, d, q);
+input clk, rst, d;
+output q;
+reg q;
+
+always @(posedge clk or posedge rst)
+begin
+    if(rst)
+        q = 1'b0;
+    else
+        q = d;
+end
+endmodule
+
+// d flip dlop test bench
+module dff_test;
+reg clk, rst, d;
+wire q;
+
+dff uut(clk, rst, d, q);
+
+initial
+begin
+    $monitor("rst = %b ; d = %b ; q = %b",rst,d,q);
+    rst = 1'b1;
+    clk = 1'b0;
+    d = 1'b1;
+    
+    #5 rst = 1'b0;
+    #10 d = 1'b0;
+    #20 $finish;
+end
+
+always #5 clk = ~clk;
+
+endmodule
+
+// -----------------------------------------------------------------------------------------
+// t flip flop
+module tff(clk, rst, t, q);
+input clk, rst, t;
+output q;
+reg q;
+
+always @(posedge clk or posedge rst)
+begin
+    if(rst)
+        q = 1'b0;
+    else
+    begin
+        if(t == 1)
+            q = ~q;
+    end
+end
+endmodule
+
+// t flip dlop test bench
+module tff_test;
+reg clk, rst, t;
+wire q;
+
+tff uut(clk, rst, t, q);
+
+initial
+begin
+    $monitor("rst = %b ; t = %b ; q = %b",rst,t,q);
+    rst = 1'b1;
+    clk = 1'b0;
+    t = 1'b1;
+    
+    #5 rst = 1'b0;
+    #10 t = 1'b0;
+    #10 $finish;
+end
+
+always #5 clk = ~clk;
+
+endmodule
+
+
+
+// -----------------------------------------------------------------------------------------
+// SR flip flop
+module srff(clk, rst, s, r, q);
+input clk, rst, s, r;
+output q;
+reg q;
+
+always @(posedge clk or posedge rst)
+begin
+    if(rst)
+        q = 1'b0;
+    else
+    begin
+        case({s,r})
+            2'b00:q = q;
+            2'b01:q = 1'b0;
+            2'b10:q = 1'b1;
+            2'b11:q = 1'bx;
+        endcase
+    end
+end
+endmodule
+
+// sr flip flop test bench
+module srff_test;
+reg clk, rst, s, r;
+wire q;
+
+srff uut(clk, rst, s, r, q);
+
+initial
+begin
+    $monitor("rst = %b ; s = %b ; r = %b ; q = %b",rst,s,r,q);
+    rst = 1'b1;
+    clk = 1'b0;
+    s = 1'b0; r = 1'b0;
+    #5 rst = 1'b0;
+    #10 s = 1'b0 ; r = 1'b1;
+    #10 s = 1'b1 ; r = 1'b0;
+    #10 s = 1'b1 ; r = 1'b1;
+    #10 $finish;
+end
+
+always #5 clk = ~clk; 
+endmodule
+
+
+
+// -----------------------------------------------------------------------------------------
+// JK flip flop
+module jkff(clk, rst, j, k, q);
+input clk, rst, j, k;
+output q;
+reg q;
+
+always @(posedge clk or posedge rst)
+begin
+    if(rst)
+        q = 1'b0;
+    else
+    begin
+        case({j,k})
+            2'b00:q = q;
+            2'b01:q = 1'b0;
+            2'b10:q = 1'b1;
+            2'b11:q = ~q;
+        endcase
+    end
+end
+endmodule
+
+// jk flip flop test bench
+module jkff_test;
+reg clk, rst, j, k;
+wire q;
+
+jkff uut(clk, rst, j, k, q);
+
+initial
+begin
+    $monitor("rst = %b ; j = %b ; k = %b ; q = %b ; time = %g",rst,j,k,q,$time);
+    rst = 1'b1;
+    clk = 1'b0;
+    j = 1'b0; k = 1'b0;
+    #5 rst = 1'b0;
+    #10 j = 1'b0 ; k = 1'b1;
+    #10 j = 1'b1 ; k = 1'b0;
+    #10 j = 1'b1 ; k = 1'b1;
+    #10 $finish;
+end
+
+always #5 clk = ~clk; 
+endmodule
