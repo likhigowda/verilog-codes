@@ -13,7 +13,7 @@ begin
 end
 endmodule
 
-// Swap without using thied variable
+// Swap without using third variable
 module swap2;
 reg a = 1'b1;
 reg b = 1'b0;
